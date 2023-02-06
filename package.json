@@ -1,0 +1,20 @@
+{
+  "name": "serverless-academy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anton-iskryk/serverless-academy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anton-iskryk/serverless-academy/issues"
+  },
+  "homepage": "https://github.com/anton-iskryk/serverless-academy#readme"
+}
