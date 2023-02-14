@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const token = '6016036665:AAEw4z9eO0N8UNM62AH6YVlelsKbD9nZpaU';
 const bot = new TelegramBot(token, { polling: true });
-const chatId = 297446381;
+// const chatId = 297446381;
 
 const city = 'kathmandu';
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/forecast';
@@ -18,6 +18,24 @@ const getForecast = async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const showMainMenu = (msg, text) => {
+  const chatId = msg.chat.id;
+
+  bot.sendMessage(chatId, text, {
+    reply_markup: {
+      keyboard: [['Weather']],
+      resize_keyboard: true,
+    },
+  });
+};
+
+const stopBot = (msg) => {
+  const chatId = msg.chat.id;
+
+  bot.sendMessage(chatId, 'The bot is not working. Type \/start to have some fun');
+  bot.stopPolling();
 };
 
 const revertDate = (date) => {
@@ -53,19 +71,29 @@ const getMessage = (forecast) => {
   return `📅 Forecast on: ${currentDate}\n🌡 Temperature: ${Math.round(revertKelvinToCelcius(temp))}°C\n🥹 Feels like: ${Math.round(revertKelvinToCelcius(feels_like))}°C\n🌬 Wind: ${wind.speed}m/s\n☁️ Clouds: ${clouds.all}%\💧 Humidity: ${humidity}%\n🧭 Pressure: ${pressure}hPa\n\n`;
 };
 
-bot.sendMessage(chatId, 'Tap to see the forecast in Kathmandu', {
-  reply_markup: {
-    keyboard: [['Forecast in Kathmandu']],
-    resize_keyboard: true,
-  },
+bot.on('message', (msg) => {
+  if (msg.text == "/start") {
+    showMainMenu(msg, 'Good, choose area');
+  }
 });
 
-bot.on('message', (msg) => {
+bot.onText(/Weather/, (msg) => {
+  const chatId = msg.chat.id;
+
+  bot.sendMessage(chatId, 'Hey, tap to see the forecast in Kathmandu', {
+    'reply_markup': {
+      keyboard: [['Forecast in Kathmandu'], ['Back to main menu']],
+      resize_keyboard: true,
+    },
+  });
+});
+
+bot.onText(/Forecast in Kathmandu/, (msg) => {
   const chatId = msg.chat.id;
 
   bot.sendMessage(chatId, 'Choose the interval', {
     'reply_markup': {
-      keyboard: [[{ text: '3 hours' }, { text: '6 hours' }]],
+      keyboard: [['3 hours', '6 hours'], ['Back to main menu']],
       resize_keyboard: true,
     },
   });
@@ -95,4 +123,12 @@ bot.onText(/6 hours/, async (msg) => {
   }
 
   bot.sendMessage(chatId, displayingData);
+});
+
+bot.onText(/Back to main menu/, (msg) => {
+  showMainMenu(msg, 'Choose the area');
+});
+
+bot.onText(/\'\/stop/, (msg) => {
+  stopBot(msg);
 });
