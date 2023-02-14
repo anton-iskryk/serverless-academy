@@ -1,8 +1,11 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
+const NodeCache = require( "node-cache" );
 
 const token = '6016036665:AAEw4z9eO0N8UNM62AH6YVlelsKbD9nZpaU';
 const bot = new TelegramBot(token, { polling: true });
+const myCache = new NodeCache();
+// const chatId = 297446381;
 
 const city = 'kathmandu';
 const BASE_FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
@@ -79,7 +82,7 @@ const getForecastMessage = (forecast) => {
 
   const currentDate = revertDate(dt_txt);
 
-  return `📅 Forecast on: ${currentDate}\n🌡 Temperature: ${Math.round(revertKelvinToCelcius(temp))}°C\n🥹 Feels like: ${Math.round(revertKelvinToCelcius(feels_like))}°C\n🌬 Wind: ${wind.speed}m/s\n☁️ Clouds: ${clouds.all}%\💧 Humidity: ${humidity}%\n🧭 Pressure: ${pressure}hPa\n\n`;
+  return `📅 Forecast on: ${currentDate}\n🌡 Temperature: ${Math.round(revertKelvinToCelcius(temp))}°C\n🥹 Feels like: ${Math.round(revertKelvinToCelcius(feels_like))}°C\n🌬 Wind: ${wind.speed} m/s\n☁️ Clouds: ${clouds.all}%\💧 Humidity: ${humidity}%\n🧭 Pressure: ${pressure} hPa\n\n`;
 };
 
 const getCurrencyRateMessage = (allRates, chosenCurrency) => {
@@ -173,6 +176,6 @@ bot.onText(/🔙 Back to main menu/, (msg) => {
   showMainMenu(msg, 'Choose the area');
 });
 
-bot.onText(/\/stop/, (msg) => {
+bot.onText(/\'\/stop/, (msg) => {
   stopBot(msg);
 });
