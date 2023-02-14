@@ -1,11 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
-const NodeCache = require( "node-cache" );
 
 const token = '6016036665:AAEw4z9eO0N8UNM62AH6YVlelsKbD9nZpaU';
 const bot = new TelegramBot(token, { polling: true });
-const myCache = new NodeCache();
-// const chatId = 297446381;
 
 const city = 'kathmandu';
 const BASE_FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
